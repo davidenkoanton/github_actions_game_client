@@ -9,7 +9,7 @@ const NONE = 'none';
 
 main();
 
-async function main() {
+function main() {
   try {
     // `who-to-greet` input defined in action metadata file
     // const nameToGreet = core.getInput('who-to-greet');
@@ -25,7 +25,7 @@ async function main() {
     console.log(`payload.commits[0].message: ${message}`);
     console.log(`detectChangesByCommitMessage: ${detectChangesByCommitMessage(message)}`);
 
-    await getCurrentVersion();
+    getCurrentVersion();
 
     console.log('---=== START FROM DIRRECT REPO ===---');
   } catch (error) {
@@ -45,9 +45,9 @@ function detectChangesByCommitMessage(message) {
   return result;
 }
 
-async function getCurrentVersion() {
+function getCurrentVersion() {
   console.log('------------------------------ getCurrentVersion');
-  const packageJsonRawdata = await fs.readFile('package.json', 'binary');
+  const packageJsonRawdata = fs.readFileSync('package.json');
   const packageJsonData = JSON.parse(packageJsonRawdata);
   console.log('------------------------------ packageJsonRawdata');
   console.log(packageJsonRawdata);
