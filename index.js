@@ -25,7 +25,7 @@ async function main() {
     console.log(`payload.commits[0].message: ${message}`);
     console.log(`detectChangesByCommitMessage: ${detectChangesByCommitMessage(message)}`);
 
-    getCurrentVersion();
+    await getCurrentVersion();
 
     console.log('---=== START FROM DIRRECT REPO ===---');
   } catch (error) {
@@ -46,6 +46,7 @@ function detectChangesByCommitMessage(message) {
 }
 
 async function getCurrentVersion() {
+  console.log('------------------------------ getCurrentVersion');
   const packageJsonRawdata = await fs.readFile('package.json', 'binary');
   const packageJsonData = JSON.parse(packageJsonRawdata);
   console.log('------------------------------ packageJsonRawdata');
