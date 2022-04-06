@@ -12,7 +12,7 @@ try {
   console.log(`The event payload: ${payload}`);
   const commits = JSON.stringify(github.context.payload.commits, undefined, 2);
   console.log(`payload.commits: ${commits}`);
-  const message = JSON.stringify(github.context.payload.commits.commits[0].message, undefined, 2);
+  const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
   console.log(`payload.commits[0].message: ${message}`);
   console.log('---=== START FROM DIRRECT REPO ===---');
 } catch (error) {
