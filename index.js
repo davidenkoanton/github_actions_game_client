@@ -49,18 +49,29 @@ function getCurrentVersion() {
 }
 
 function updateVersionByChanges(version, changes) {
+  console.log(`Current version: ${version}`);
+  const versionArray = version.split('.');
   new Map([
-    [NONE, (version) => {
-      console.log('No changes detected.');
+    [NONE, () => {
+      console.log('Changes clasify is not detected. No version update.');
     }],
-    [PATCH, (version) => {
+    [PATCH, () => {
+      versionArray[2]++;
       console.log('Path changes detected.');
     }],
-    [MINOR, (version) => {
+    [MINOR, () => {
+      versionArray[1]++;
+      versionArray[2] = 0;
       console.log('Minor changes detected.');
     }],
-    [MAJOR, (version) => {
+    [MAJOR, () => {
+      versionArray[0]++;
+      versionArray[1] = 0;
+      versionArray[2] = 0;
       console.log('Major changes detected.');
     }],
-  ]).get(changes)(version);
+  ]).get(changes)();
+  const newVersion = `${versionArray[0]}.${versionArray[1]}.${versionArray[2]}`;
+  console.log(`New version: ${newVersion}`);
+  return newVersion;
 }
