@@ -6,24 +6,35 @@ const MINOR = 'feat';
 const PATCH = 'fix';
 const NONE = 'none';
 
-try {
-  // `who-to-greet` input defined in action metadata file
-  // const nameToGreet = core.getInput('who-to-greet');
-  // console.log(`Hello ${nameToGreet}!`);
-  // const time = (new Date()).toTimeString();
-  // core.setOutput("time", time);
+main();
 
-  // Get the JSON webhook payload for the event that triggered the workflow
-  // const payload = JSON.stringify(github.context.payload, undefined, 2);
-  // console.log(`The event payload: ${payload}`);
+async function main() {
+  try {
+    // `who-to-greet` input defined in action metadata file
+    // const nameToGreet = core.getInput('who-to-greet');
+    // console.log(`Hello ${nameToGreet}!`);
+    // const time = (new Date()).toTimeString();
+    // core.setOutput("time", time);
 
-  const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
-  console.log(`payload.commits[0].message: ${message}`);
-  console.log(`detectChangesByCommitMessage: ${detectChangesByCommitMessage(message)}`);
+    // Get the JSON webhook payload for the event that triggered the workflow
+    // const payload = JSON.stringify(github.context.payload, undefined, 2);
+    // console.log(`The event payload: ${payload}`);
 
-  console.log('---=== START FROM DIRRECT REPO ===---');
-} catch (error) {
-  core.setFailed(error.message);
+    const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
+    console.log(`payload.commits[0].message: ${message}`);
+    console.log(`detectChangesByCommitMessage: ${detectChangesByCommitMessage(message)}`);
+
+    const packageJsonRawdata = await fs.readFile('package.json', 'binary');
+    const packageJsonData = JSON.parse(packageJsonRawdata);
+    console.log('------------------------------ packageJsonRawdata');
+    console.log(packageJsonRawdata);
+    console.log('------------------------------ packageJsonData');
+    console.log(packageJsonData);
+
+    console.log('---=== START FROM DIRRECT REPO ===---');
+  } catch (error) {
+    core.setFailed(error.message);
+  }
 }
 
 function detectChangesByCommitMessage(message) {
