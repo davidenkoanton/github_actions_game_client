@@ -46,11 +46,10 @@ function detectChangesByCommitMessage(message) {
 }
 
 function getCurrentVersion() {
-  console.log('------------------------------ getCurrentVersion');
   const packageJsonRawdata = fs.readFileSync('package.json');
   const packageJsonData = JSON.parse(packageJsonRawdata);
-  console.log('------------------------------ packageJsonRawdata');
-  console.log(packageJsonRawdata);
   console.log('------------------------------ packageJsonData');
   console.log(packageJsonData);
+  console.log('------------------------------ packageJsonData.version');
+  console.log(packageJsonData.version);
 }
