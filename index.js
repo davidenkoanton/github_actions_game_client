@@ -22,7 +22,8 @@ function main() {
     // console.log(`The event payload: ${payload}`);
 
     const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
-    console.log(`Current ref: ${ref}`);
+    const branch = ref.split('/')[2];
+    console.log(`branch: ${branch}`);
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
     console.log(`Current version: ${getCurrentVersion()}`);
