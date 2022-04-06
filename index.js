@@ -34,9 +34,9 @@ function detectChangesByCommitMessage(message) {
   let result = NONE;
   if (message.indexOf(MAJOR) === 1) {
     result = MAJOR;
-  } if (message.indexOf(MINOR) === 1) {
+  } else if (message.indexOf(MINOR) === 1) {
     result = MINOR;
-  } if (message.indexOf(PATCH) === 1) {
+  } else if (message.indexOf(PATCH) === 1) {
     result = PATCH;
   }
   return result;
