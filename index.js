@@ -19,12 +19,12 @@ function main() {
 
     // Get the JSON webhook payload for the event that triggered the workflow
     // const payload = JSON.stringify(github.context.payload, undefined, 2);
-    // console.log(`The event payload: ${payload}`);
+    console.log(`The event payload: ${payload}`);
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
-    updateVersionByChanges(getCurrentVersion(), detectChangesByCommitMessage(message));
-
-    console.log('---=== START FROM DIRRECT REPO ===---');
+    console.log(`Current version: ${getCurrentVersion()}`);
+    const newVersion = getNewVersionByChanges(getCurrentVersion(), detectChangesByCommitMessage(message));
+    console.log(`New version: ${newVersion}`);
   } catch (error) {
     core.setFailed(error.message);
   }
@@ -48,8 +48,7 @@ function getCurrentVersion() {
   return packageJsonData.version;
 }
 
-function updateVersionByChanges(version, changes) {
-  console.log(`Current version: ${version}`);
+function getNewVersionByChanges(version, changes) {
   const versionArray = version.split('.');
   new Map([
     [NONE, () => {
@@ -72,6 +71,5 @@ function updateVersionByChanges(version, changes) {
     }],
   ]).get(changes)();
   const newVersion = `${versionArray[0]}.${versionArray[1]}.${versionArray[2]}`;
-  console.log(`New version: ${newVersion}`);
   return newVersion;
 }
