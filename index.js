@@ -8,11 +8,12 @@ try {
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
+  const payload = JSON.stringify(github.context.payload, undefined, 2);
   console.log(`The event payload: ${payload}`);
-  console.log(`payload.commits: ${payload.commits}`);
-  console.log(`payload.commits[0]: ${payload.commits[0]}`);
-  console.log(`payload.commits[0].message: ${payload.commits[0].message}`);
+  const commits = JSON.stringify(github.context.payload.commits, undefined, 2);
+  console.log(`payload.commits: ${commits}`);
+  const message = JSON.stringify(github.context.payload.commits.commits[0].message, undefined, 2);
+  console.log(`payload.commits[0].message: ${message}`);
   console.log('---=== START FROM DIRRECT REPO ===---');
 } catch (error) {
   core.setFailed(error.message);
