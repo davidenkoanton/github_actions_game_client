@@ -27,16 +27,12 @@ try {
 }
 
 function detectChangesByCommitMessage(message) {
-  console.log(`1: ${message.indexOf(MAJOR)}`);
-  console.log(`2: ${message.indexOf(MINOR)}`);
-  console.log(`3: ${message.indexOf(PATCH)}`);
-
   let result = NONE;
-  if (message.indexOf(MAJOR) === 0) {
+  if (message.indexOf(MAJOR) === 1) {
     result = MAJOR;
-  } if (message.indexOf(MINOR) === 0) {
+  } if (message.indexOf(MINOR) === 1) {
     result = MINOR;
-  } if (message.indexOf(PATCH) === 0) {
+  } if (message.indexOf(PATCH) === 1) {
     result = PATCH;
   }
   return result;
