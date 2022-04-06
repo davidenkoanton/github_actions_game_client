@@ -22,10 +22,7 @@ function main() {
     // console.log(`The event payload: ${payload}`);
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
-    console.log(`payload.commits[0].message: ${message}`);
-    console.log(`detectChangesByCommitMessage: ${detectChangesByCommitMessage(message)}`);
-
-    getCurrentVersion();
+    updateVersionByChanges(getCurrentVersion(), detectChangesByCommitMessage(message));
 
     console.log('---=== START FROM DIRRECT REPO ===---');
   } catch (error) {
@@ -48,8 +45,22 @@ function detectChangesByCommitMessage(message) {
 function getCurrentVersion() {
   const packageJsonRawdata = fs.readFileSync('package.json');
   const packageJsonData = JSON.parse(packageJsonRawdata);
-  console.log('------------------------------ packageJsonData');
-  console.log(packageJsonData);
-  console.log('------------------------------ packageJsonData.version');
-  console.log(packageJsonData.version);
+  return packageJsonData.version;
+}
+
+function updateVersionByChanges(version, changes) {
+  new Map([
+    [NONE, (version) => {
+      console.log('No changes detected.');
+    }],
+    [PATCH, (version) => {
+      console.log('Path changes detected.');
+    }],
+    [MINOR, (version) => {
+      console.log('Minor changes detected.');
+    }],
+    [MAJOR, (version) => {
+      console.log('Major changes detected.');
+    }],
+  ]).get(changes)(version);
 }
