@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const fs = require('fs');
 
 const MAJOR = 'feat!';
 const MINOR = 'feat';
@@ -24,12 +25,7 @@ async function main() {
     console.log(`payload.commits[0].message: ${message}`);
     console.log(`detectChangesByCommitMessage: ${detectChangesByCommitMessage(message)}`);
 
-    const packageJsonRawdata = await fs.readFile('package.json', 'binary');
-    const packageJsonData = JSON.parse(packageJsonRawdata);
-    console.log('------------------------------ packageJsonRawdata');
-    console.log(packageJsonRawdata);
-    console.log('------------------------------ packageJsonData');
-    console.log(packageJsonData);
+    getCurrentVersion();
 
     console.log('---=== START FROM DIRRECT REPO ===---');
   } catch (error) {
@@ -47,4 +43,13 @@ function detectChangesByCommitMessage(message) {
     result = PATCH;
   }
   return result;
+}
+
+async function getCurrentVersion() {
+  const packageJsonRawdata = await fs.readFile('package.json', 'binary');
+  const packageJsonData = JSON.parse(packageJsonRawdata);
+  console.log('------------------------------ packageJsonRawdata');
+  console.log(packageJsonRawdata);
+  console.log('------------------------------ packageJsonData');
+  console.log(packageJsonData);
 }
