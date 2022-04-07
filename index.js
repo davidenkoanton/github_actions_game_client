@@ -77,12 +77,16 @@ function getNewVersionByChanges(version, changes) {
   return newVersion;
 }
 
-function addToRepository(branch) {
+async function addToRepository(branch) {
   console.log('start addToRepository');
-  simpleGit('./', { binary: 'git' })
-    .add('package.json', () => console.log('git add'))
-    .commit('[github actions]: update vsersion', () => console.log('git commit'))
-    .branch([branch])
-    .push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
+  // simpleGit('./', { binary: 'git' })
+  //   .add('package.json', () => console.log('git add'))
+  //   .commit('[github actions]: update vsersion', () => console.log('git commit'))
+  //   .branch([branch])
+  //   .push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
+  await simpleGit().add('package.json', () => console.log('git add'));
+  await simpleGit().commit('[github actions]: update vsersion', () => console.log('git commit'));
+  await simpleGit().branch([branch]);
+  await simpleGit().push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
   console.log('end addToRepository');
 }
