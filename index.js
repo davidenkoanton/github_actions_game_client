@@ -18,17 +18,23 @@ function main() {
     // core.setOutput("time", time);
 
     // Get the JSON webhook payload for the event that triggered the workflow
-    // const payload = JSON.stringify(github.context.payload, undefined, 2);
-    // console.log(`The event payload: ${payload}`);
-
-    const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
-    const branch = ref.split('/')[2].split('"')[0];
-    console.log(`branch: ${branch}`);
+    const payload = JSON.stringify(github.context.payload, undefined, 2);
+    console.log(`The event payload: ${payload}`);
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
     console.log(`Current version: ${getCurrentVersion()}`);
-    const newVersion = getNewVersionByChanges(getCurrentVersion(), detectChangesByCommitMessage(message));
+    const packageJsonData = getPackageJsonData();
+    const newVersion = getNewVersionByChanges(packageJsonData.version, detectChangesByCommitMessage(message));
     console.log(`New version: ${newVersion}`);
+    packageJsonData.version = newVersion;
+    fs.writeFileSync('package.json', JSON.stringify(packageJsonData));
+
+    console.log('Test file updated.');
+    console.log(getPackageJsonData());
+
+    // const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
+    // const branch = ref.split('/')[2].split('"')[0];
+    // addToRepository(branch, );
   } catch (error) {
     core.setFailed(error.message);
   }
@@ -46,10 +52,9 @@ function detectChangesByCommitMessage(message) {
   return result;
 }
 
-function getCurrentVersion() {
+function getPackageJsonData() {
   const packageJsonRawdata = fs.readFileSync('package.json');
-  const packageJsonData = JSON.parse(packageJsonRawdata);
-  return packageJsonData.version;
+  return JSON.parse(packageJsonRawdata);
 }
 
 function getNewVersionByChanges(version, changes) {
@@ -76,4 +81,14 @@ function getNewVersionByChanges(version, changes) {
   ]).get(changes)();
   const newVersion = `${versionArray[0]}.${versionArray[1]}.${versionArray[2]}`;
   return newVersion;
+}
+
+function addToRepository(branch, repositoryUrl) {
+  simpleGit(directoryName, { binary: 'git' })
+    .init(() => console.log('git init'))
+    .add('./*', () => console.log('git add'))
+    .commit('first commit!', () => console.log('git commit'))
+    .addRemote('origin', repositoryUrl, () => console.log('git addRemote'))
+    .branch(['dgm-dev'])
+    .push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
 }
