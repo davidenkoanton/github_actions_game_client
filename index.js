@@ -22,8 +22,8 @@ function main() {
     console.log(`The event payload: ${payload}`);
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
-    console.log(`Current version: ${getCurrentVersion()}`);
     const packageJsonData = getPackageJsonData();
+    console.log(`Current version: ${packageJsonData.version}`);
     const newVersion = getNewVersionByChanges(packageJsonData.version, detectChangesByCommitMessage(message));
     console.log(`New version: ${newVersion}`);
     packageJsonData.version = newVersion;
