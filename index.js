@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
+const simpleGit = require('simple-git');
 
 const MAJOR = 'feat!';
 const MINOR = 'feat';
@@ -29,11 +30,10 @@ function main() {
     packageJsonData.version = newVersion;
     fs.writeFileSync('package.json', JSON.stringify(packageJsonData));
 
-    // const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
-    // const branch = ref.split('/')[2].split('"')[0];
+    const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
+    const branch = ref.split('/')[2].split('"')[0];
     const git_url = JSON.stringify(github.context.payload.repository.git_url, undefined, 2);
-    console.log(`git_url: ${git_url}`);
-    // addToRepository(branch, );
+    addToRepository(branch, git_url);
   } catch (error) {
     core.setFailed(error.message);
   }
@@ -84,9 +84,8 @@ function getNewVersionByChanges(version, changes) {
 
 function addToRepository(branch, repositoryUrl) {
   simpleGit(directoryName, { binary: 'git' })
-    .init(() => console.log('git init'))
-    .add('./*', () => console.log('git add'))
-    .commit('first commit!', () => console.log('git commit'))
+    .add('package.json', () => console.log('git add'))
+    .commit('[github actions]: update vsersion', () => console.log('git commit'))
     .addRemote('origin', repositoryUrl, () => console.log('git addRemote'))
     .branch(['dgm-dev'])
     .push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
