@@ -18,8 +18,8 @@ function main() {
     // core.setOutput("time", time);
 
     // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2);
-    console.log(`The event payload: ${payload}`);
+    // const payload = JSON.stringify(github.context.payload, undefined, 2);
+    // console.log(`The event payload: ${payload}`);
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
     const packageJsonData = getPackageJsonData();
@@ -29,11 +29,10 @@ function main() {
     packageJsonData.version = newVersion;
     fs.writeFileSync('package.json', JSON.stringify(packageJsonData));
 
-    console.log('Test file updated.');
-    console.log(getPackageJsonData());
-
     // const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
     // const branch = ref.split('/')[2].split('"')[0];
+    const git_url = JSON.stringify(github.context.payload.repository.git_url, undefined, 2);
+    console.log(`git_url: ${git_url}`);
     // addToRepository(branch, );
   } catch (error) {
     core.setFailed(error.message);
