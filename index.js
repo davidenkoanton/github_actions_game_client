@@ -3,7 +3,7 @@ const github = require('@actions/github');
 const fs = require('fs');
 const simpleGit = require('simple-git');
 
-const MAJOR = 'feat!';
+const MAJOR = 'BREAKING CHANGE';
 const MINOR = 'feat';
 const PATCH = 'fix';
 const NONE = 'none';
@@ -12,10 +12,6 @@ main();
 
 function main() {
   try {
-    // Get the JSON webhook payload for the event that triggered the workflow
-    // const payload = JSON.stringify(github.context.payload, undefined, 2);
-    // console.log(`The event payload: ${payload}`);
-
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
     const packageJsonData = getPackageJsonData();
     const newVersion = getNewVersionByChanges(packageJsonData.version, detectChangesByCommitMessage(message));
@@ -77,11 +73,9 @@ function getNewVersionByChanges(version, changes) {
 }
 
 async function addToRepository(branch) {
-  console.log('start addToRepository');
   await simpleGit().addConfig('user.name', 'Anton Davidenko');
   await simpleGit().addConfig('user.email', 'a.davidenko@pls.life');
   await simpleGit().add('package.json', () => console.log('git add'));
   await simpleGit().commit('[github actions]: update vsersion', () => console.log('git commit'));
   await simpleGit().push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
-  console.log('end addToRepository');
 }
