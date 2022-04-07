@@ -18,16 +18,17 @@ function main() {
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
     const packageJsonData = getPackageJsonData();
-    console.log(`Current version: ${packageJsonData.version}`);
     const newVersion = getNewVersionByChanges(packageJsonData.version, detectChangesByCommitMessage(message));
-    console.log(`New version: ${newVersion}`);
-    packageJsonData.version = newVersion;
-    fs.writeFileSync('package.json', JSON.stringify(packageJsonData));
+    console.log(`Current version: ${packageJsonData.version}, new version: ${newVersion}, need update: ${newVersion !== packageJsonData.version}`);
+    if (newVersion !== packageJsonData.version) {
+      packageJsonData.version = newVersion;
+      fs.writeFileSync('package.json', JSON.stringify(packageJsonData));
 
-    const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
-    const branch = ref.split('/')[2].split('"')[0];
-    const git_url = JSON.stringify(github.context.payload.repository.git_url, undefined, 2);
-    addToRepository(branch, git_url);
+      const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
+      const branch = ref.split('/')[2].split('"')[0];
+      // const git_url = JSON.stringify(github.context.payload.repository.git_url, undefined, 2);
+      addToRepository(branch);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
@@ -77,10 +78,11 @@ function getNewVersionByChanges(version, changes) {
 }
 
 function addToRepository(branch) {
-  console.log('addToRepository');
+  console.log('start addToRepository');
   simpleGit('./', { binary: 'git' })
-    // .branch([branch])
     .add('package.json', () => console.log('git add'))
     .commit('[github actions]: update vsersion', () => console.log('git commit'))
+    .branch([branch])
     .push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
+  console.log('end addToRepository');
 }
