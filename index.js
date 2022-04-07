@@ -33,7 +33,7 @@ function main() {
     const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
     const branch = ref.split('/')[2].split('"')[0];
     const git_url = JSON.stringify(github.context.payload.repository.git_url, undefined, 2);
-    addToRepository(branch, git_url);
+    // addToRepository(branch, git_url);
   } catch (error) {
     core.setFailed(error.message);
   }
