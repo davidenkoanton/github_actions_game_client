@@ -12,12 +12,6 @@ main();
 
 function main() {
   try {
-    // `who-to-greet` input defined in action metadata file
-    // const nameToGreet = core.getInput('who-to-greet');
-    // console.log(`Hello ${nameToGreet}!`);
-    // const time = (new Date()).toTimeString();
-    // core.setOutput("time", time);
-
     // Get the JSON webhook payload for the event that triggered the workflow
     // const payload = JSON.stringify(github.context.payload, undefined, 2);
     // console.log(`The event payload: ${payload}`);
@@ -33,7 +27,7 @@ function main() {
     const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
     const branch = ref.split('/')[2].split('"')[0];
     const git_url = JSON.stringify(github.context.payload.repository.git_url, undefined, 2);
-    // addToRepository(branch, git_url);
+    addToRepository(branch, git_url);
   } catch (error) {
     core.setFailed(error.message);
   }
@@ -83,6 +77,7 @@ function getNewVersionByChanges(version, changes) {
 }
 
 function addToRepository(branch, repositoryUrl) {
+  console.log('addToRepository');
   simpleGit(directoryName, { binary: 'git' })
     .add('package.json', () => console.log('git add'))
     .commit('[github actions]: update vsersion', () => console.log('git commit'))
