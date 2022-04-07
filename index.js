@@ -78,7 +78,7 @@ function getNewVersionByChanges(version, changes) {
 
 function addToRepository(branch, repositoryUrl) {
   console.log('addToRepository');
-  simpleGit(directoryName, { binary: 'git' })
+  simpleGit('./', { binary: 'git' })
     .add('package.json', () => console.log('git add'))
     .commit('[github actions]: update vsersion', () => console.log('git commit'))
     .addRemote('origin', repositoryUrl, () => console.log('git addRemote'))
