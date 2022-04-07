@@ -76,12 +76,11 @@ function getNewVersionByChanges(version, changes) {
   return newVersion;
 }
 
-function addToRepository(branch, repositoryUrl) {
+function addToRepository(branch) {
   console.log('addToRepository');
   simpleGit('./', { binary: 'git' })
+    // .branch([branch])
     .add('package.json', () => console.log('git add'))
     .commit('[github actions]: update vsersion', () => console.log('git commit'))
-    .addRemote('origin', repositoryUrl, () => console.log('git addRemote'))
-    .branch(['dgm-dev'])
     .push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
 }
