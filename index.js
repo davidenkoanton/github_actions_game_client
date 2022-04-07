@@ -13,8 +13,8 @@ main();
 function main() {
   try {
     // Get the JSON webhook payload for the event that triggered the workflow
-    // const payload = JSON.stringify(github.context.payload, undefined, 2);
-    // console.log(`The event payload: ${payload}`);
+    const payload = JSON.stringify(github.context.payload, undefined, 2);
+    console.log(`The event payload: ${payload}`);
 
     const message = JSON.stringify(github.context.payload.commits[0].message, undefined, 2);
     const packageJsonData = getPackageJsonData();
@@ -27,7 +27,7 @@ function main() {
       const ref = JSON.stringify(github.context.payload.ref, undefined, 2);
       const branch = ref.split('/')[2].split('"')[0];
       // const git_url = JSON.stringify(github.context.payload.repository.git_url, undefined, 2);
-      addToRepository(branch);
+      // addToRepository(branch);
     }
   } catch (error) {
     core.setFailed(error.message);
@@ -84,6 +84,8 @@ async function addToRepository(branch) {
   //   .commit('[github actions]: update vsersion', () => console.log('git commit'))
   //   .branch([branch])
   //   .push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
+  await simpleGit().addConfig('user.name', 'Some One');
+  await simpleGit().addConfig('user.email', 'some@one.com');
   await simpleGit().add('package.json', () => console.log('git add'));
   await simpleGit().commit('[github actions]: update vsersion', () => console.log('git commit'));
   await simpleGit().branch([branch]);
