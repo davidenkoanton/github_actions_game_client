@@ -88,7 +88,6 @@ async function addToRepository(branch) {
   await simpleGit().addConfig('user.email', 'a.davidenko@pls.life');
   await simpleGit().add('package.json', () => console.log('git add'));
   await simpleGit().commit('[github actions]: update vsersion', () => console.log('git commit'));
-  await simpleGit().branch([branch]);
   await simpleGit().push(['-u', 'origin', branch], () => console.log(`git push ${branch}`));
   console.log('end addToRepository');
 }
